@@ -5,4 +5,8 @@ public class RemoveDirectoryCommand implements command{
     {
 
     }
+    public int add(int a,int b)
+    {
+        return a+b;
+    }
 }

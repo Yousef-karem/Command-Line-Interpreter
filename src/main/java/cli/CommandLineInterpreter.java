@@ -95,11 +95,11 @@ public class CommandLineInterpreter {
         }
         if (replaceOperator) {
             ReplaceCommand replaceCommand = new ReplaceCommand();
-            replaceCommand.execute(output, currentDirectory, fileName);
+            replaceCommand.execute(output, fileName);
         }
         if (appendOperator) {
             AppendCommand appendCommand = new AppendCommand();
-            appendCommand.execute(output, currentDirectory, fileName);
+            appendCommand.execute(output, fileName);
         }
     }
 

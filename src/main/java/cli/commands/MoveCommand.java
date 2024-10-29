@@ -1,7 +1,7 @@
 package cli.commands;
 
 public class MoveCommand {
-    public void execute()
+    public void execute(String[] args)
     {
 
     }

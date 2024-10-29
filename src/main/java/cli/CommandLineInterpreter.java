@@ -4,7 +4,7 @@ import cli.commands.*;
 
 import java.io.File;
 import java.util.Scanner;
-
+import java.util.Arrays;
 public class CommandLineInterpreter {
 
     private static File currentDirectory = new File(System.getProperty("user.dir"));
@@ -15,7 +15,10 @@ public class CommandLineInterpreter {
         running = true;
         Scanner scanner = new Scanner(System.in);
         while (running) {
-            System.out.print(currentDirectory + "> ");
+            PrintWorkDirectoryCommand printWorkDirectoryCommand = new PrintWorkDirectoryCommand();
+            String command[]={""};
+            printWorkDirectoryCommand.execute(command);
+            System.out.print("> ");
             String input = scanner.nextLine();
             executeCommand(input);
         }
@@ -35,42 +38,43 @@ public class CommandLineInterpreter {
                 break;
             case "pwd":
                 PrintWorkDirectoryCommand printWorkDirectoryCommand = new PrintWorkDirectoryCommand();
-                printWorkDirectoryCommand.execute();
+                printWorkDirectoryCommand.execute(command);
+                System.out.println();
                 break;
 
             case "ls":
                 ListFilesCommand listFilesCommand = new ListFilesCommand();
-                listFilesCommand.execute();
+                listFilesCommand.execute(command);
                 break;
 
             case "cd":
                 ChangeDirectoryCommand changeDirectoryCommand = new ChangeDirectoryCommand();
-                changeDirectoryCommand.execute();
+                changeDirectoryCommand.execute(command);
                 break;
 
             case "mkdir":
                 MakeDirectoryClass mkdirCommand = new MakeDirectoryClass();
-                mkdirCommand.execute();
+                mkdirCommand.execute(command);
                 break;
             case "rmdir":
                 //The directory should be empty before remove it
                 RemoveDirectoryCommand removeDirectoryCommand = new RemoveDirectoryCommand();
-                removeDirectoryCommand.execute();
+                removeDirectoryCommand.execute(command);
                 break;
             case "touch":
                 CreateFileCommand createFileCommand = new CreateFileCommand();
-                createFileCommand.execute();
+                createFileCommand.execute(command);
             case "mv":
                 MoveCommand moveCommand = new MoveCommand();
-                moveCommand.execute();
+                moveCommand.execute(command);
                 break;
             case "rm":
                 RemoveCommand removeCommand = new RemoveCommand();
-                removeCommand.execute();
+                removeCommand.execute(command);
                 break;
             case "cat":
                 ShowFileContentCommand showFileContentCommand = new ShowFileContentCommand();
-                showFileContentCommand.execute();
+                showFileContentCommand.execute(command);
                 break;
             case "exit":
                 stop();

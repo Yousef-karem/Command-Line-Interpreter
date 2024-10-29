@@ -1,5 +1,4 @@
 package cli.commands;
-
 public interface command {
-    public void execute();
+    void execute(String[] args);
 }

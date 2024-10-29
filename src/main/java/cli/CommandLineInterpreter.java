@@ -40,7 +40,7 @@ public class CommandLineInterpreter {
 
             case "ls":
                 ListFilesCommand listFilesCommand = new ListFilesCommand();
-                listFilesCommand.execute();
+                listFilesCommand.execute(command, currentDirectory);
                 break;
 
             case "cd":

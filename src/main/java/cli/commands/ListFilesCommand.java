@@ -1,13 +1,11 @@
 package cli.commands;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-
-
 public class ListFilesCommand {
-    public String execute(String[] command, File currentDirectory) {
+    public String execute(String[] command) {
+        File currentDirectory= new File(System.getProperty("user.dir"));
         boolean isReversed = false;
         boolean showAllFiles = false;
         boolean valid = true;

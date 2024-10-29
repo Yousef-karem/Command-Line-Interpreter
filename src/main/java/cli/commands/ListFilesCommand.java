@@ -7,7 +7,7 @@ import java.util.Collections;
 
 
 public class ListFilesCommand {
-    public void execute(String[] command, File currentDirectory) {
+    public String execute(String[] command, File currentDirectory) {
         boolean isReversed = false;
         boolean showAllFiles = false;
         boolean valid = true;
@@ -28,9 +28,10 @@ public class ListFilesCommand {
                 break;
             }
         }
+        String ret = "";
         if (!valid) {
             System.out.println("Invalid command");
-            return;
+            return ret;
         }
         File[] files = currentDirectory.listFiles();
         Arrays.sort(files);
@@ -38,7 +39,9 @@ public class ListFilesCommand {
         for (File file : files) {
             if (showAllFiles || file.getName().charAt(0) != '.') {
                 System.out.println(file.getName());
+                ret += file.getName() + "\n";
             }
         }
+        return ret;
     }
 }

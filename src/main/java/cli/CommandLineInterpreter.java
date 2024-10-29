@@ -3,7 +3,10 @@ package cli;
 import cli.commands.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.Arrays;
+import java.io.FileWriter;
 
 public class CommandLineInterpreter {
 
@@ -11,7 +14,7 @@ public class CommandLineInterpreter {
 
     private boolean running;
 
-    public void start() {
+    public void start() throws IOException {
         running = true;
         Scanner scanner = new Scanner(System.in);
         while (running) {
@@ -22,16 +25,27 @@ public class CommandLineInterpreter {
         scanner.close();
     }
 
-    public void executeCommand(String input) {
+    public void executeCommand(String input) throws IOException {
         String[] command = input.split(" ");
+        String fileName = null;
+        boolean appendOperator = false;
+        boolean replaceOperator = false;
+        if (command.length >= 3) {
+            if (command[command.length - 2].equals(">")) {
+                replaceOperator = true;
+                fileName = command[command.length - 1];
+                command = Arrays.copyOf(command, command.length - 2);
+            } else if (command[command.length - 2].equals(">>")) {
+                appendOperator = true;
+                fileName = command[command.length - 1];
+                command = Arrays.copyOf(command, command.length - 2);
+            }
+        }
+        String output = "";
         switch (command[0]) {
             case "help":
-                System.out.println("Available commands:");
-                System.out.println(" - exit: Terminate the CLI.");
-                System.out.println(" - help: Display available commands and their usage.");
-                System.out.println(" - pwd: Display the current directory.");
-                System.out.println(" - ls: List files and directories.");
-                System.out.println(" - cd <directory>: Change the current directory.");
+                HelpCommand helpCommand = new HelpCommand();
+                output = helpCommand.execute();
                 break;
             case "pwd":
                 PrintWorkDirectoryCommand printWorkDirectoryCommand = new PrintWorkDirectoryCommand();
@@ -40,7 +54,7 @@ public class CommandLineInterpreter {
 
             case "ls":
                 ListFilesCommand listFilesCommand = new ListFilesCommand();
-                listFilesCommand.execute(command, currentDirectory);
+                output = listFilesCommand.execute(command, currentDirectory);
                 break;
 
             case "cd":
@@ -78,6 +92,14 @@ public class CommandLineInterpreter {
                 System.out.println("Command not recognized. Type 'help' for a list of commands.");
                 break;
 
+        }
+        if (replaceOperator) {
+            ReplaceCommand replaceCommand = new ReplaceCommand();
+            replaceCommand.execute(output, currentDirectory, fileName);
+        }
+        if (appendOperator) {
+            AppendCommand appendCommand = new AppendCommand();
+            appendCommand.execute(output, currentDirectory, fileName);
         }
     }
 

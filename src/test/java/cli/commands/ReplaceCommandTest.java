@@ -50,7 +50,8 @@ class ReplaceCommandTest {
         replaceCommand.execute(newContent, testFileName);
 
         // Verify the content has been overwritten
-        String CurrentContent = Files.readString(Path.of(testFileName));
+        File currFile =new File(System.getProperty("user.dir") + "\\" + testFileName);
+        String CurrentContent = Files.readString(currFile.toPath());
         assertEquals(newContent, CurrentContent, "File content should be overwritten");
     }
 

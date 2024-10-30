@@ -1,5 +1,6 @@
 package cli.commands;
 
+import cli.CommandLineInterpreter;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -12,12 +13,14 @@ class MakeDirectoryClassTest {
 
     @BeforeEach
     void setUp() {
+        CommandLineInterpreter.output="";
         // Store the initial working directory
         initialDir = System.getProperty("user.dir");
     }
 
     @AfterEach
     void tearDown() {
+        CommandLineInterpreter.output="";
         // Delete any created directories
         deleteDirectoryIfExists("testDir");
         deleteDirectoryIfExists("anotherDir");

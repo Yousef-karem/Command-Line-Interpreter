@@ -1,5 +1,6 @@
 package cli.commands;
 
+import cli.CommandLineInterpreter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ class MoveCommandTest {
     private MoveCommand mvCommand;
     @BeforeEach
     public  void setup(){
+        CommandLineInterpreter.output="";
         mvCommand=new MoveCommand();
     }
     @Test
@@ -51,6 +53,7 @@ class MoveCommandTest {
     }
     @AfterEach
     public void clear() {
+        CommandLineInterpreter.output="";
         new File("Sourcefile.txt").delete();
         new File("destinationDir").delete();
         new File("firstname.txt").delete();

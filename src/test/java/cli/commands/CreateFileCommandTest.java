@@ -1,5 +1,6 @@
 package cli.commands;
 
+import cli.CommandLineInterpreter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ class CreateFileCommandTest {
     @BeforeEach
     public void setUp() {
         createcommand = new CreateFileCommand();
+        CommandLineInterpreter.output="";
     }
     @Test
     public void createFile(){
@@ -48,6 +50,7 @@ class CreateFileCommandTest {
         for (String fileName : new String[]{"file1.txt", "file2.txt"}) {
             new File(fileName).delete();
         }
+        CommandLineInterpreter.output="";
     }
 
 }

@@ -1,5 +1,7 @@
 package cli.commands;
 
+import cli.CommandLineInterpreter;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -8,21 +10,16 @@ public class PipeCommand implements command {
 
     @Override
     public void execute(String[] args) {
-
-        // Execute the first command and capture its output
-        String command1 = args[0];
-        String command2 = args[2];
-
-        String output = executeAndCaptureOutput(new String[]{command1});
-
-        if (output != null) {
-            if(ExecuteCommand(new String[]{command2,output})==0)
+        String command2 = args[0];
+        if (CommandLineInterpreter.output != null) {
+            if(ExecuteCommand(new String[]{command2, CommandLineInterpreter.output})==0)
             {
                 System.out.println("Failed to execute the Second command.");
             }
 
         } else {
             System.out.println("Failed to execute the first command.");
+
         }
     }
 
@@ -61,20 +58,6 @@ public class PipeCommand implements command {
             default:
                 System.out.println("Command not recognized. Type 'help' for a list of commands.");
                 return 0;
-        }
-    }
-
-    private String executeAndCaptureOutput(String[] command) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
-        int ret = ExecuteCommand(command);
-        System.setOut(originalOut);
-        // Redirect System.out to capture output
-        if (ret == 1) {
-            return outputStream.toString().trim();
-        } else {
-            return null;
         }
     }
 

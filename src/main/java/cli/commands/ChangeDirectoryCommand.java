@@ -17,7 +17,7 @@ public class ChangeDirectoryCommand  implements command{
         if (newDir1.exists() && newDir1.isDirectory()) {
             System.setProperty("user.dir", newDir1.getAbsolutePath());
         }
-        else if(newDir2.exists() && newDir2.isDirectory())
+        else if(newDir2.exists() )
         {
             System.setProperty("user.dir", newDir2.getAbsolutePath());
         }

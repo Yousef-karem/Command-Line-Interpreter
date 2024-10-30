@@ -1,10 +1,12 @@
 package cli.commands;
+import cli.CommandLineInterpreter;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 public class ListFilesCommand {
-    public String execute(String[] command) {
+    public void execute(String[] command) {
         File currentDirectory= new File(System.getProperty("user.dir"));
         boolean isReversed = false;
         boolean showAllFiles = false;
@@ -28,18 +30,18 @@ public class ListFilesCommand {
         }
         String ret = "";
         if (!valid) {
-            System.out.println("Invalid command");
-            return ret;
+            CommandLineInterpreter.SuccessExecute=false;
+            CommandLineInterpreter.output="Invalid command";
+            return;
         }
         File[] files = currentDirectory.listFiles();
         Arrays.sort(files);
-        if (isReversed) Collections.reverse(Arrays.asList(files));
+        if (isReversed)
+            Collections.reverse(Arrays.asList(files));
         for (File file : files) {
             if (showAllFiles || file.getName().charAt(0) != '.') {
-                System.out.println(file.getName());
-                ret += file.getName() + "\n";
+                CommandLineInterpreter.output+= file.getName()+"\n";
             }
         }
-        return ret;
     }
 }

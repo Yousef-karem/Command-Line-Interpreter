@@ -1,5 +1,6 @@
 package cli.commands;
 
+import cli.CommandLineInterpreter;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -13,6 +14,7 @@ class RemoveDirectoryCommandTest {
 
     @BeforeEach
     void setUp() {
+        CommandLineInterpreter.output="";
         // Store the initial working directory
         initialDir = System.getProperty("user.dir");
     }
@@ -22,6 +24,7 @@ class RemoveDirectoryCommandTest {
         // Clean up any remaining directories after each test
         deleteDirectoryIfExists("testDir");
         deleteDirectoryIfExists("nonEmptyDir");
+        CommandLineInterpreter.output="";
     }
 
     // Helper method to delete a directory if it exists

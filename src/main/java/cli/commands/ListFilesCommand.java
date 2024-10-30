@@ -31,7 +31,7 @@ public class ListFilesCommand {
         String ret = "";
         if (!valid) {
             CommandLineInterpreter.SuccessExecute=false;
-            CommandLineInterpreter.output="Invalid command";
+            CommandLineInterpreter.output="";
             return;
         }
         File[] files = currentDirectory.listFiles();

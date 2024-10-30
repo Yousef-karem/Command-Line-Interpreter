@@ -40,7 +40,7 @@ public class PipeCommandTest {
     public void testPipeWithAndCd() throws IOException {
         File file = null;
         try {
-             file = new File(System.getProperty("user.dir") + "/" + testFileName);
+            file = new File(System.getProperty("user.dir") + "/" + testFileName);
             if (!file.exists()) {
                 boolean isCreated = file.createNewFile();
                 assertTrue(isCreated, "File creation failed");

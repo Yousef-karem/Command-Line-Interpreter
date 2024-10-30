@@ -1,5 +1,6 @@
 package cli.commands;
 
+import cli.CommandLineInterpreter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ class ChangeDirectoryCommandTest
 
     @BeforeEach
     void setUp() {
+        CommandLineInterpreter.output="";
         // Store the initial directory to restore it later
         initialDir = System.getProperty("user.dir");
     }
@@ -22,6 +24,7 @@ class ChangeDirectoryCommandTest
     void tearDown() {
         // Restore the initial directory after each test
         System.setProperty("user.dir", initialDir);
+        CommandLineInterpreter.output="";
     }
 
     @Test

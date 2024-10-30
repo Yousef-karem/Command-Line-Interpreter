@@ -1,25 +1,27 @@
 package cli;
-
 import cli.commands.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Arrays;
-import java.io.FileWriter;
-public class CommandLineInterpreter {
 
+public class CommandLineInterpreter {
+    public static boolean SuccessExecute=true;
+    public static String output ="";
     private boolean running;
     Scanner scanner = new Scanner(System.in);
     public void start() throws IOException {
         running = true;
         Scanner scanner = new Scanner(System.in);
         while (running) {
+            SuccessExecute=true;
             PrintWorkDirectoryCommand printWorkDirectoryCommand = new PrintWorkDirectoryCommand();
             String command[]={""};
             printWorkDirectoryCommand.execute(command);
+            System.out.print(output);
             System.out.print("> ");
+            output="";
             String input = scanner.nextLine();
             executeCommand(input);
         }
@@ -27,10 +29,13 @@ public class CommandLineInterpreter {
     }
 
     public void executeCommand(String input) throws IOException {
+
         String[] command = input.split(" ");
         String fileName = null;
+        String commandForPip = null;
         boolean appendOperator = false;
         boolean replaceOperator = false;
+        boolean PipeOperator = false;
         if (command.length >= 3) {
             if (command[command.length - 2].equals(">")) {
                 replaceOperator = true;
@@ -42,13 +47,12 @@ public class CommandLineInterpreter {
                 command = Arrays.copyOf(command, command.length - 2);
             }
             else if(command[command.length - 2].equals("|")) {
-                PipeCommand pipeCommand = new PipeCommand();
-                pipeCommand.execute(command);
-
+                PipeOperator = true;
+                commandForPip = command[command.length - 1];
+                command = Arrays.copyOf(command, command.length - 2);
             }
 
         }
-        String output = "";
         switch (command[0]) {
             case "help":
                 HelpCommand helpCommand = new HelpCommand();
@@ -57,7 +61,6 @@ public class CommandLineInterpreter {
             case "pwd":
                 PrintWorkDirectoryCommand printWorkDirectoryCommand = new PrintWorkDirectoryCommand();
                 printWorkDirectoryCommand.execute(command);
-                System.out.println();
                 break;
 
             case "ls":
@@ -108,77 +111,38 @@ public class CommandLineInterpreter {
                     removeCommand.execute(removeArgs);}
                 break;
             case "cat":
-                System.out.println("Enter the file names (separated by space) or 'exit' to stop:");
-                String inp = scanner.nextLine();
-
-                if (inp.equalsIgnoreCase("exit")) {
-                    break;
-                }
-                String[] parts = inp.split(" ");
                 ShowFileContentCommand showFileContentCommand = new ShowFileContentCommand();
-
-                List<String> fileNames = new ArrayList<>();
-                boolean isAppending = false;
-                String targetFile = null;
-                for (int i = 0; i < parts.length; i++) {
-                    if (parts[i].equals(">")) {
-                        if (i + 1 < parts.length) {
-                            targetFile = parts[i + 1];
-                            break;
-                        } else {
-                            System.out.println("cat: missing target file after '>'");
-                            return;
-                        }
-                    } else if (parts[i].equals(">>")) {
-                        if (i + 1 < parts.length) {
-                            targetFile = parts[i + 1];
-                            isAppending = true;
-                            break;
-                        } else {
-                            System.out.println("cat: missing target file after '>>'");
-                            return;
-                        }
-                    } else {
-                        fileNames.add(parts[i]);
-                    }
-                }
-                if (targetFile != null) {
-                    if (fileNames.isEmpty() && !isAppending) {
-                        showFileContentCommand.createFile(targetFile);
-                    } else if (isAppending) {
-                        String[] appendArgs = new String[fileNames.size() + 2];
-                        for (int i = 0; i < fileNames.size(); i++) {
-                            appendArgs[i] = fileNames.get(i);
-                        }
-                        appendArgs[fileNames.size()] = ">>";
-                        appendArgs[appendArgs.length - 1] = targetFile;
-                        showFileContentCommand.execute(appendArgs);
-                    } else {
-                        String[] overwriteArgs = new String[fileNames.size() + 1];
-                        for (int i = 0; i < fileNames.size(); i++) {
-                            overwriteArgs[i] = fileNames.get(i);
-                        }
-                        overwriteArgs[overwriteArgs.length - 1] = targetFile;
-                        showFileContentCommand.execute(overwriteArgs);
-                    }
-                } else {
-                    showFileContentCommand.execute(fileNames.toArray(new String[0]));
-                }
+                showFileContentCommand.execute(command);
                 break;
             case "exit":
                 stop();
+                break;
             default:
                 System.out.println("Command not recognized. Type 'help' for a list of commands.");
                 break;
 
         }
+        if(!SuccessExecute)
+        {
+            replaceOperator=false;
+            appendOperator=false;
+            PipeOperator=false;
+        }
         if (replaceOperator) {
             ReplaceCommand replaceCommand = new ReplaceCommand();
-            replaceCommand.execute(output, fileName);
+            replaceCommand.execute( CommandLineInterpreter.output,fileName);
         }
-        if (appendOperator) {
+        else if (appendOperator) {
             AppendCommand appendCommand = new AppendCommand();
-            appendCommand.execute(output, fileName);
+            appendCommand.execute( CommandLineInterpreter.output,fileName);
+        }
+        else if(PipeOperator)
+        {
+            PipeCommand pipeCommand = new PipeCommand();
+            pipeCommand.execute(new String[]{commandForPip});
+        }
+        else if(output!=null) {
+            System.out.println(output);
         }
     }
 

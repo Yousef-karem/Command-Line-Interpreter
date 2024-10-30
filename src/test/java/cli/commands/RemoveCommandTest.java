@@ -1,5 +1,6 @@
 package cli.commands;
 
+import cli.CommandLineInterpreter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import  org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ class RemoveCommandTest {
     @BeforeEach
     public void setUp() {
         rmCommand = new RemoveCommand();
+        CommandLineInterpreter.output="";
     }
 
     @Test
@@ -56,6 +58,7 @@ class RemoveCommandTest {
         new File("file1.txt").delete();
         new File("file2.txt").delete();
         new File("Dir").delete();
+        CommandLineInterpreter.output="";
     }
 
 }

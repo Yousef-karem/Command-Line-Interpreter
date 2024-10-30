@@ -16,9 +16,11 @@ public class ListFilesCommandTest {
 
     private ListFilesCommand listFilesCommand;
     private String testDirectoryPath;
+    private String intialDir;
 
     @BeforeEach
     public void setup() throws IOException {
+        intialDir=System.getProperty("user.dir");
         listFilesCommand = new ListFilesCommand();
         testDirectoryPath = System.getProperty("user.dir") + "/testDir";
 
@@ -48,7 +50,7 @@ public class ListFilesCommandTest {
         }
 
         // Reset the working directory to the original one
-        System.setProperty("user.dir", System.getProperty("user.home"));
+        System.setProperty("user.dir", intialDir);
         CommandLineInterpreter.output="";
     }
 

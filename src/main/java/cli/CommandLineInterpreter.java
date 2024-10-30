@@ -41,6 +41,12 @@ public class CommandLineInterpreter {
                 fileName = command[command.length - 1];
                 command = Arrays.copyOf(command, command.length - 2);
             }
+            else if(command[command.length - 2].equals("|")) {
+                PipeCommand pipeCommand = new PipeCommand();
+                pipeCommand.execute(command);
+
+            }
+
         }
         String output = "";
         switch (command[0]) {
